@@ -41,5 +41,18 @@ class HashMap {
       }
     }
   }
+
+  _resize(size){
+    const oldSlot = this._slots;
+    this._capacity = size;
+    this._length = 0;
+    this._slots = [];
+
+    for(const slot in oldSlot){
+      if(slot !== undefined){
+        this._set(slot.key, slot.value);
+      }
+    }
+  }
 }
 
