@@ -20,7 +20,7 @@ class HashMap {
   }
 
   set(key, value){
-    const loadRatio  = (this.length + 1) / this._capacity;
+    const loadRatio  = (this.length + this._deleted + 1) / this._capacity;
     if(loadRatio > this.MAX_LOAD_RATIO){
       this._resize(this._capacity * this.SIZE_RATIO);
     }
