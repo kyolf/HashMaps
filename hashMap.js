@@ -19,14 +19,27 @@ class HashMap {
     return hash >>> 0;
   }
 
+  get(key){
+    const index = this._findSlot(key);
+    if(this._slots[index] === undefined){
+      throw new Error('Key Error');
+    }
+    return this._slots[index].value;
+  }
+
   set(key, value){
     const loadRatio  = (this.length + this._deleted + 1) / this._capacity;
     if(loadRatio > this.MAX_LOAD_RATIO){
       this._resize(this._capacity * this.SIZE_RATIO);
     }
     const index = this._findSlot(key);
-    this._slots[index] = {key, value, deleted: false};
-    this.length++;
+    if(this._slots[index] === undefined){
+      this._slots[index] = {key, value, deleted: false};
+      this.length++;
+    }
+    else{
+      this._slots[index] = {key, value, deleted: false};    
+    }
   }
 
   _findSlot(key){
@@ -69,8 +82,19 @@ class HashMap {
 
 const hash = new HashMap();
 
+<<<<<<< HEAD
 
 hash.set('hello', 'goodbye');
 hash.set('hello', 'goodbye');
 hash.set('hello', 'goodbye');
 console.log(hash.length);
+=======
+function isPermPalidrome(string, hashMap){
+  for(let i = 0; i < string.length; i++){
+    const value = hashMap.get(string.charAt(i));
+    if(){
+      
+    }
+  }
+}
+>>>>>>> c11a67395280f20d468517cd37e933ea1a00be9e
