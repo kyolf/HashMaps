@@ -122,11 +122,15 @@ class HashMap2 {
   }
 
   get(key){
-    const index = this._findSlot(key);
+    const {start, index} = this._findNode(key);
     if(this._slots[index] === undefined){
       return undefined;
     }
-    return this._slots[index].value;
+    return this._slots[start].get(index);
+  }
+
+  getList(){
+    return this._slots;
   }
 
   set(key, value){
@@ -304,23 +308,31 @@ function isPermPalidrome(string, hashMap){
   return true;
 }
 
-//console.log(isPermPalidrome('dabde', hash));
+console.log(isPermPalidrome('dabde', hash));
 
-// const handleAnagrams = (arr, hash) => {
-//   arr.forEach(word => {
-//     //console.log(hash.get(word));
-//     const hashedWord = HashMap._hashString(word);
-//     if(!hash.get(HashMap._hashString(word))){
-//       hash.set(HashMap._hashString(word), [word]);
-//     }else{
-//       hash.set(HashMap._hashString(word), [...hash.get(word), word]);
-//     }
-//   });
-//   console.log(hash._slots);
-//   return hash;
-// };
+const handleAnagrams = (arr, hash) => {
+  const newArr = [];
+  arr.forEach(word => {
+    hash.set(word,'');
+  });
+  const hashArr = hash.getList();
+  for(let i = 0; i < hashArr.length; i++){
+    if(hashArr[i]){
+      const groupArr = [];
+      let node = hashArr[i].head;
+      while(node !== null){
+        groupArr.push(node.value);
+        node = node.next;
+      }
+      newArr.push(groupArr);
+    }
+  }
+  console.log(hash._slots);
+  return newArr;
+};
 
-//handleAnagrams(['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race'], hash);
+const hashMop2 = new HashMap2();
+console.log(handleAnagrams(['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race'], hashMop2));
 
 const hashMop = new HashMap2();
 hashMop.set('bob','');
@@ -328,5 +340,6 @@ hashMop.set('bbo', '');
 hashMop.remove('bob');
 hashMop.set('love','');
 hashMop.set('Tanner is smart','');
+console.log(hashMop.get('bbo', ''));
 console.log(hashMop._slots);
 
