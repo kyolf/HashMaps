@@ -17,5 +17,28 @@ class HashMap {
     }
     return hash >>> 0;
   }
+
+  set(key, value){
+    const loadRatio  = (this.length + 1) / this._capacity;
+    if(loadRatio > this.MAX_LOAD_RATIO){
+      this._resize(this._capacity * this.SIZE_RATIO);
+    }
+    const index = this._findSlot(key);
+    this._slots[index] = {key, value};
+    this.length++;
+  }
+
+  _findSlot(key){
+    const hash = this._hashString(key);
+    const start = hash % this._capacity;
+
+    for(let i = 0; i < start + this._capacity; i++){
+      const index = i % this._capacity;
+      const slot = this._slots[index];
+      if(slot === undefined || slot.key === key){
+        return index;
+      }
+    }
+  }
 }
 
