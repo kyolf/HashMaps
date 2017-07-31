@@ -134,20 +134,36 @@ class HashMap2 {
     if(loadRatio > this.MAX_LOAD_RATIO){
       this._resize(this._capacity * this.SIZE_RATIO);
     }
-    const index = this._findSlot(key);
-    if(this._slots[index] === undefined){
-      this._slots[index] = {key, value, deleted: false};
-      this.length++;
+    let {start, index} = this._findNode(key);
+    if(!this._slots[start]){
+      const llist = new LinkedList();
+      llist.insert(0, key);
+      // llist.deleted = false;
+      this._slots[start] = llist; 
     }
     else{
-      this._slots[index] = {key, value, deleted: false};    
+      this._slots[start].insert(index, key);
     }
+    this.length++;
   }
 
-  _findSlot(key){
+  _findNode(key){
     const hash = HashMap._hashString(key);
     const start = hash % this._capacity;
-    
+    const initialSlot = this._slots[start];
+    let index = 0;
+    if(!initialSlot){
+      return {start, index};
+    }
+    let node = this._slots[start].head;
+    while(node !== null){
+      if(node.value === key){
+        return {start, index};
+      }
+      node = node.next;
+      index++;
+    }
+    return {start, index};
   }
 
   _resize(size){
@@ -157,19 +173,20 @@ class HashMap2 {
     this._slots = [];
 
     for(const slot of oldSlot){
-      if(slot !== undefined && !slot.deleted){
+      if(slot !== undefined ){
         this.set(slot.key, slot.value);
       }
     }
   }
 
   remove(key){
-    const index = this._findSlot(key);
-    const slot = this._slots[index];
+    const {start, index} = this._findNode(key);
+    const slot = this._slots[start];
     if(slot === undefined){
       throw new Error('The slot was undefined.');
     }
-    slot.deleted = true;
+    // slot.deleted = true;
+    this._slots[start].remove(index);
     this.length--;
     this._deleted++;
   }
@@ -305,6 +322,11 @@ function isPermPalidrome(string, hashMap){
 
 //handleAnagrams(['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race'], hash);
 
-const hashMop = new HashMap();
-
+const hashMop = new HashMap2();
+hashMop.set('bob','');
+hashMop.set('bbo', '');
+hashMop.remove('bob');
+hashMop.set('love','');
+hashMop.set('Tanner is smart','');
+console.log(hashMop._slots);
 
