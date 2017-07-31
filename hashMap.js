@@ -1,5 +1,180 @@
 'use strict';
 
+class LinkedList {
+  constructor() {
+    this.length = 0;
+    this.head = null;
+  }
+
+  insert(index, value) {
+    if (index < 0 || index > this.length) {
+      throw new Error('Index error');
+    }
+
+    const newNode = {
+      value
+    };
+
+    if (index == 0) {
+      newNode.next = this.head;
+      this.head = newNode;
+    }
+    else {
+      // Find the node which we want to insert after
+      const node = this._find(index - 1);
+      newNode.next = node.next;
+      node.next = newNode;
+    }
+
+    this.length++;
+  }
+
+  _find(index) {
+    let node = this.head;
+    for (let i = 0; i < index; i++) {
+      node = node.next;
+    }
+    return node;
+  }
+
+  get(index) {
+    if (index < 0 || index >= this.length) {
+      throw new Error('Index error');
+    }
+
+    return this._find(index).value;
+  }
+
+  remove(index) {
+    if (index < 0 || index >= this.length) {
+      throw new Error('Index error');
+    }
+
+    if (index === 0) {
+      this.head = this.head.next;
+    }
+    else {
+      // Find the node before the one we want to remove
+      const node = this._find(index - 1);
+      node.next = node.next.next;
+    }
+
+    this.length--;
+  }
+}
+
+const display = (linklist) => {
+  let node = linklist.head;
+  while (node !== null) {
+    console.log(node.value);
+    node = node.next;
+  }
+};
+
+const size = (linklist) => {
+  let node = linkedList.head;
+  let counter = 0;
+  while (node.next !== null){
+    node = node.next;
+    counter++;
+  }
+  return counter;
+};
+
+const isEmpty = (link) => {
+  if(link.head === null) return true;
+  return false;
+};
+
+const findPrevious = (link, value) => {
+  let node = link.head;
+  while(node.next !== null){
+    if(node.next.value === value) return node;
+    node = node.next;
+  }
+};
+
+const findLast = (link) => {
+  let node = link.head;
+  while(node.next !== null){
+    node = node.next;
+  }
+  return node;
+};
+
+class HashMap2 {
+  constructor(initialCapacity = 8){
+    this._capacity = initialCapacity;
+    this.length = 0;
+    this._slots = [];
+    this.MAX_LOAD_RATIO = 0.9;
+    this.SIZE_RATIO = 3;
+    this._deleted = 0;
+  }
+
+  static _hashString(string) {
+    let hash = 5381;
+    for (let i=0; i<string.length; i++) {
+      hash = (hash << 5) + hash + string.charCodeAt(i);
+      hash = hash & hash;
+    }
+    return hash >>> 0;
+  }
+
+  get(key){
+    const index = this._findSlot(key);
+    if(this._slots[index] === undefined){
+      return undefined;
+    }
+    return this._slots[index].value;
+  }
+
+  set(key, value){
+    const loadRatio  = (this.length + this._deleted + 1) / this._capacity;
+    if(loadRatio > this.MAX_LOAD_RATIO){
+      this._resize(this._capacity * this.SIZE_RATIO);
+    }
+    const index = this._findSlot(key);
+    if(this._slots[index] === undefined){
+      this._slots[index] = {key, value, deleted: false};
+      this.length++;
+    }
+    else{
+      this._slots[index] = {key, value, deleted: false};    
+    }
+  }
+
+  _findSlot(key){
+    const hash = HashMap._hashString(key);
+    const start = hash % this._capacity;
+    
+  }
+
+  _resize(size){
+    const oldSlot = this._slots;
+    this._capacity = size;
+    this._length = 0;
+    this._slots = [];
+
+    for(const slot of oldSlot){
+      if(slot !== undefined && !slot.deleted){
+        this.set(slot.key, slot.value);
+      }
+    }
+  }
+
+  remove(key){
+    const index = this._findSlot(key);
+    const slot = this._slots[index];
+    if(slot === undefined){
+      throw new Error('The slot was undefined.');
+    }
+    slot.deleted = true;
+    this.length--;
+    this._deleted++;
+  }
+}
+
 class HashMap {
   constructor(initialCapacity = 8){
     this._capacity = initialCapacity;
@@ -112,4 +287,24 @@ function isPermPalidrome(string, hashMap){
   return true;
 }
 
-console.log(isPermPalidrome('dabde', hash));
+//console.log(isPermPalidrome('dabde', hash));
+
+// const handleAnagrams = (arr, hash) => {
+//   arr.forEach(word => {
+//     //console.log(hash.get(word));
+//     const hashedWord = HashMap._hashString(word);
+//     if(!hash.get(HashMap._hashString(word))){
+//       hash.set(HashMap._hashString(word), [word]);
+//     }else{
+//       hash.set(HashMap._hashString(word), [...hash.get(word), word]);
+//     }
+//   });
+//   console.log(hash._slots);
+//   return hash;
+// };
+
+//handleAnagrams(['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race'], hash);
+
+const hashMop = new HashMap();
+
+
