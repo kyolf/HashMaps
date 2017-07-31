@@ -82,19 +82,3 @@ class HashMap {
 
 const hash = new HashMap();
 
-<<<<<<< HEAD
-
-hash.set('hello', 'goodbye');
-hash.set('hello', 'goodbye');
-hash.set('hello', 'goodbye');
-console.log(hash.length);
-=======
-function isPermPalidrome(string, hashMap){
-  for(let i = 0; i < string.length; i++){
-    const value = hashMap.get(string.charAt(i));
-    if(){
-      
-    }
-  }
-}
->>>>>>> c11a67395280f20d468517cd37e933ea1a00be9e
