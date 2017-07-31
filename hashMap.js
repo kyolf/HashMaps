@@ -22,7 +22,7 @@ class HashMap {
   get(key){
     const index = this._findSlot(key);
     if(this._slots[index] === undefined){
-      throw new Error('Key Error');
+      return undefined;
     }
     return this._slots[index].value;
   }
@@ -82,3 +82,34 @@ class HashMap {
 
 const hash = new HashMap();
 
+function isPermPalidrome(string, hashMap){
+  for(let i = 0; i < string.length; i++){
+    const char = string.charAt(i);
+    const value = hashMap.get(char);
+    if(value === undefined){
+      hashMap.set(char, 1);
+    }
+    else{
+      hashMap.set(char, value+1);
+    }
+  }
+  
+  let counter = 0;
+  const noDup = string.split('').filter((el, index, arr) => {
+    if(arr.indexOf(el) === index){
+      return el;
+    }
+  });
+  for(let i = 0; i < noDup.length; i++){
+    const char = string.charAt(i);
+    if(hashMap.get(char) % 2 === 1){
+      counter++;
+    }
+    if(counter > 1){
+      return false;
+    }
+  }
+  return true;
+}
+
+console.log(isPermPalidrome('dabde', hash));
