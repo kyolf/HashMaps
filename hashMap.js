@@ -70,3 +70,7 @@ class HashMap {
 const hash = new HashMap();
 
 
+hash.set('hello', 'goodbye');
+hash.set('hello', 'goodbye');
+hash.set('hello', 'goodbye');
+console.log(hash.length);
