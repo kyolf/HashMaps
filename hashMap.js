@@ -30,13 +30,13 @@ class HashMap {
   }
 
   _findSlot(key){
-    const hash = this._hashString(key);
+    const hash = HashMap._hashString(key);
     const start = hash % this._capacity;
 
     for(let i = 0; i < start + this._capacity; i++){
       const index = i % this._capacity;
       const slot = this._slots[index];
-      if(slot === undefined ||( slot.key === key && !slot.deleted)){
+      if(slot === undefined || (slot.key === key && !slot.deleted)){
         return index;
       }
     }
@@ -48,11 +48,36 @@ class HashMap {
     this._length = 0;
     this._slots = [];
 
-    for(const slot in oldSlot){
-      if(slot !== undefined){
-        this._set(slot.key, slot.value);
+    for(const slot of oldSlot){
+      if(slot !== undefined && !slot.deleted){
+        this.set(slot.key, slot.value);
       }
     }
   }
+
+  remove(key){
+    const index = this._findSlot(key);
+    const slot = this._slots[index];
+    if(slot === undefined){
+      throw new Error('The slot was undefined.');
+    }
+    slot.deleted = true;
+    this.length--;
+    this._deleted++;
+  }
 }
 
+const hash = new HashMap();
+
+hash.set('bob', 'the builder');
+hash.set('frank', 'the tank');
+hash.set('bill', 'the ill');
+hash.set('jill', 'the pill');
+hash.set('thomas', 'the train');
+hash.set('jack', 'and jill');
+hash.set('when', 'up the hill');
+hash.set('idk', 'how the story goes after that');
+console.log(hash.length);
+hash.remove('bob');
+console.log(hash.length);
+console.log(hash._deleted);
