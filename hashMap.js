@@ -69,15 +69,4 @@ class HashMap {
 
 const hash = new HashMap();
 
-hash.set('bob', 'the builder');
-hash.set('frank', 'the tank');
-hash.set('bill', 'the ill');
-hash.set('jill', 'the pill');
-hash.set('thomas', 'the train');
-hash.set('jack', 'and jill');
-hash.set('when', 'up the hill');
-hash.set('idk', 'how the story goes after that');
-console.log(hash.length);
-hash.remove('bob');
-console.log(hash.length);
-console.log(hash._deleted);
+
